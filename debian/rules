@@ -1,4 +1,20 @@
 #!/usr/bin/make -f
+# -*- makefile -*-
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+include /usr/share/dpkg/architecture.mk
+
+ifneq (linux,$(DEB_HOST_ARCH_OS))
+        EXTRA_CMAKE_ARGS += -DKWINDOWSYSTEM_WAYLAND=OFF
+endif
 
 %:
 	dh $@
+
+override_dh_auto_configure:
+	dh_auto_configure -- -DBUILD_QCH=ON -DBUILD_TESTING=OFF $(EXTRA_CMAKE_ARGS)
+
+override_dh_auto_test:
+	# Disable auto tests at build time
+	:

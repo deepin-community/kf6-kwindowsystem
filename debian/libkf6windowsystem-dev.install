@@ -1,0 +1,4 @@
+usr/include/KF6/KWindowSystem/
+usr/lib/*/cmake/KF6WindowSystem/
+usr/lib/*/libKF6WindowSystem.so
+usr/lib/*/pkgconfig/KF6WindowSystem.pc
