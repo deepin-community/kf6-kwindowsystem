@@ -1,3 +1,9 @@
+kf6-kwindowsystem (6.6.0-2deepin3) unstable; urgency=medium
+
+  * fix: find Qt6 GuiPrivate package for Qt 6.10 and later
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Mon, 16 Nov 2026 11:13:20 +0800
+
 kf6-kwindowsystem (6.6.0-2deepin2) unstable; urgency=medium
 
   * Rebuild with LTO enabled (dpkg vendor feature optimize/lto).
