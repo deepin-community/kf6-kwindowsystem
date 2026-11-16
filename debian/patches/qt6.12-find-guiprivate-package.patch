@@ -1,0 +1,35 @@
+Description: find Qt6 GuiPrivate package explicitly for Qt >= 6.10
+ KF6WindowSystem, the X11 plugin and the KWayland plugin all link
+ Qt6::GuiPrivate (the wayland one via the versionless Qt::GuiPrivate
+ alias). Since Qt 6.10 the private module targets are split into
+ standalone CMake packages and are no longer created by the main
+ module's find_package call, so CMake generation fails against
+ Qt 6.12 with:
+ .
+   Target "KF6WindowSystem" links to:
+   Qt6::GuiPrivate
+   but the target was not found.
+ .
+ Add a version-gated find_package(Qt6 REQUIRED COMPONENTS GuiPrivate)
+ right after the top-level find_package(Qt6Gui) call, making the
+ private target (and its versionless alias) visible to every
+ subdirectory. Builds against Qt <= 6.9 are unchanged.
+Origin: vendor
+Forwarded: not-needed
+Last-Update: 2026-11-16
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,6 +42,12 @@
+ # Dependencies
+ set(REQUIRED_QT_VERSION 6.5.0)
+ find_package(Qt6Gui ${REQUIRED_QT_VERSION} CONFIG REQUIRED)
++# Qt 6.10 起，私有模块目标(如 Qt6::GuiPrivate)拆分为独立的 CMake 包，
++# 不再随主模块的 find_package 自动创建，需要显式查找，否则 CMake 配置阶段报
++# "Target ... links to: Qt6::GuiPrivate but the target was not found"。
++if(Qt6Gui_VERSION VERSION_GREATER_EQUAL 6.10)
++    find_package(Qt6 REQUIRED COMPONENTS GuiPrivate)
++endif()
+ 
+ option(KWINDOWSYSTEM_QML "Build QML bindings" ON)
+ 
